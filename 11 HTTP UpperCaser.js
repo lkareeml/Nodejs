@@ -3,16 +3,21 @@ var port = process.argv[2];
 
 
 var server = http.createServer(function(request,response){
-    var alldata = '';
-    request.setEncoding('utf8');
-    request.on('data',function(chunk){
-        alldata += chunk; 
-    });
-    request.on('end',function(){
-        var x = alldata.toUpperCase();
-        console.log(x);
-        response.end();
-    });
+    if(request.method == 'POST')
+    {
+        var alldata = '';
+        request.setEncoding('utf8');
+        request.on('data',function(chunk){
+          alldata += chunk; 
+        });
+         request.on('end',function(){
+           alldata = alldata.toUpperCase();
+            response.writeHead(200,{'Content-Type':'text/plain'});
+            response.write(alldata,'utf8',function(){
+              response.end();
+           });
+      });
+    }
 });
 
 server.listen(port);
